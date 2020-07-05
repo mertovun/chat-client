@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StoreState } from '../reducers';
 import { helloAction } from '../actions';
+import connectServer from '../api/connectServer';
 
 interface Props {
   hello: number;
@@ -11,6 +12,7 @@ interface Props {
 class App extends Component<Props> {
   componentDidMount() {
     this.props.helloAction();
+    connectServer();
   }
 
   render() {
