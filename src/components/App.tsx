@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { State } from '../reducers';
+import { StoreState } from '../reducers';
 import { helloAction } from '../actions';
 
 interface Props {
-  hello: string;
+  hello: number;
   helloAction: Function;
 }
 
@@ -17,7 +17,9 @@ class App extends Component<Props> {
     return <div>{this.props.hello}</div>;
   }
 }
-const mapStateToProps = ({ hello }: State) => ({ hello });
+const mapStateToProps = ({ hello }: StoreState): { hello: number } => ({
+  hello,
+});
 
 const mapDispatchToProps = { helloAction };
 

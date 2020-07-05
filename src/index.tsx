@@ -10,6 +10,12 @@ import App from './components/App';
 
 const sagaMiddleware = createSagaMiddleware();
 
+declare global {
+  interface Window {
+    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
+  }
+}
+
 const composeEnhancer =
   (process.env.NODE_ENV !== 'production' &&
     window['__REDUX_DEVTOOLS_EXTENSION_COMPOSE__']) ||

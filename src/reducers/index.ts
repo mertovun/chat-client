@@ -1,10 +1,10 @@
 import { combineReducers, Reducer } from 'redux';
 import { helloReducer } from '../reducers/helloReducer';
 
-export interface State {
+export interface StoreState {
   hello: number;
 }
 
-export const reducers: Reducer<State> = combineReducers({
+export const reducers: Reducer<StoreState> = combineReducers({
   hello: helloReducer,
 });
