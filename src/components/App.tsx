@@ -2,21 +2,29 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { StoreState } from '../reducers';
 import { helloAction } from '../actions';
-import connectServer from '../api/connectServer';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import ChatRoom from './ChatRoom';
+import Counter from './Counter';
+import New from './New';
 
-interface Props {
-  hello: number;
-  helloAction: Function;
-}
+interface Props {}
 
 class App extends Component<Props> {
-  componentDidMount() {
-    this.props.helloAction();
-    connectServer();
-  }
+  componentDidMount() {}
 
   render() {
-    return <div>{this.props.hello}</div>;
+    return (
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/">
+            <div>Home</div>
+          </Route>
+          <Route exact path="/counter" component={Counter} />
+          <Route exact path="/new" component={New} />
+          <Route path="/:id" component={ChatRoom} />
+        </Switch>
+      </BrowserRouter>
+    );
   }
 }
 const mapStateToProps = ({ hello }: StoreState): { hello: number } => ({
