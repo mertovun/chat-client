@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { StoreState } from '../reducers';
-import { helloAction } from '../actions';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import ChatRoom from './ChatRoom';
-import Counter from './Counter';
 import New from './New';
 
 interface Props {}
@@ -19,7 +15,6 @@ class App extends Component<Props> {
           <Route exact path="/">
             <div>Home</div>
           </Route>
-          <Route exact path="/counter" component={Counter} />
           <Route exact path="/new" component={New} />
           <Route path="/:id" component={ChatRoom} />
         </Switch>
@@ -27,10 +22,5 @@ class App extends Component<Props> {
     );
   }
 }
-const mapStateToProps = ({ hello }: StoreState): { hello: number } => ({
-  hello,
-});
 
-const mapDispatchToProps = { helloAction };
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

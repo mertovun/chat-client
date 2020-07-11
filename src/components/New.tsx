@@ -1,19 +1,22 @@
 import React, { Component } from 'react';
-import connectServer from '../api/connectServer';
+import { connect } from 'react-redux';
+import { createRoom } from '../actions/';
+import { History } from 'history';
 
 interface Props {
-  history: any;
+  history: History;
+  createRoom: Function;
 }
 
 class New extends Component<Props> {
   componentDidMount() {
-    this.props.history.push('/asdfasdf');
-    connectServer();
+    //this.props.history.push('/asdfasdf');
+    this.props.createRoom(this.props.history);
   }
 
   render() {
-    return <div>New</div>;
+    return null;
   }
 }
 
-export default New;
+export default connect(null, { createRoom })(New);

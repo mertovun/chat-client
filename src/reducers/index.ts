@@ -1,10 +1,10 @@
 import { combineReducers, Reducer } from 'redux';
-import { helloReducer } from '../reducers/helloReducer';
+import { roomReducer, Room } from './roomReducer';
 
 export interface StoreState {
-  hello: number;
+  room: Room;
 }
 
 export const reducers: Reducer<StoreState> = combineReducers({
-  hello: helloReducer,
+  room: roomReducer,
 });

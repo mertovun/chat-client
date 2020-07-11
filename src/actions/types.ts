@@ -1,5 +1,6 @@
-import { EventTypes } from '../EventTypes';
-
 export enum ActionTypes {
-  HELLO = 'HELLO',
+  JOIN_SERVER = 'JOIN_SERVER',
+  JOIN_ROOM = 'JOIN_ROOM',
+  CREATE_ROOM = 'CREATE_ROOM',
+  ROOM_CREATED = 'ROOM_CREATED',
 }
