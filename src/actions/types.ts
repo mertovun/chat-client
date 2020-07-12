@@ -3,4 +3,5 @@ export enum ActionTypes {
   JOIN_ROOM = 'JOIN_ROOM',
   CREATE_ROOM = 'CREATE_ROOM',
   ROOM_CREATED = 'ROOM_CREATED',
+  SEND_MESSAGE = 'SEND_MESSAGE',
 }
