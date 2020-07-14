@@ -1,6 +1,7 @@
 import { ActionTypes } from './types';
 import { History } from 'history';
 import { Socket } from 'socket.io-client';
+import { Message } from '../reducers/roomReducer';
 
 export * from './types';
 
@@ -18,7 +19,22 @@ export interface joinRoomAction {
 
 export interface sendMessageAction {
   type: ActionTypes.SEND_MESSAGE;
+  payload: Message;
+}
+
+export interface messageSentAction {
+  type: ActionTypes.MESSAGE_SENT;
+  payload: Message;
+}
+
+export interface updateUserAction {
+  type: ActionTypes.UPDATE_USER;
   payload: string;
+}
+
+export interface messageReceivedAction {
+  type: ActionTypes.MESSAGE_RECEIVED;
+  payload: Message;
 }
 
 export const createRoom = (history: History): createRoomAction => ({
@@ -33,7 +49,26 @@ export const joinRoom = (nspId: string): joinRoomAction => ({
   },
 });
 
-export const sendMessage = (msg: string): sendMessageAction => ({
+export const message = () => ({
+  type: ActionTypes.MESSAGE,
+});
+
+export const sendMessage = (payload: Message): sendMessageAction => ({
   type: ActionTypes.SEND_MESSAGE,
-  payload: msg,
+  payload,
+});
+
+export const messageSent = (payload: Message): messageSentAction => ({
+  type: ActionTypes.MESSAGE_SENT,
+  payload,
+});
+
+export const messageReceived = (payload: Message): messageReceivedAction => ({
+  type: ActionTypes.MESSAGE_RECEIVED,
+  payload,
+});
+
+export const updateUser = (payload: string): updateUserAction => ({
+  type: ActionTypes.UPDATE_USER,
+  payload,
 });

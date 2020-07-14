@@ -1,5 +1,5 @@
 import { combineReducers, Reducer } from 'redux';
-import { roomReducer, Room } from './roomReducer';
+import { Room, roomReducer } from './roomReducer';
 
 export interface StoreState {
   room: Room;

@@ -1,8 +1,17 @@
 import { takeEvery, put, call, fork, take } from 'redux-saga/effects';
 import { eventChannel, Subscribe, Unsubscribe } from 'redux-saga';
-import { ActionTypes, createRoomAction, joinRoomAction } from '../actions';
+import {
+  ActionTypes,
+  createRoomAction,
+  joinRoomAction,
+  messageSent,
+  messageReceived,
+  updateUser,
+  sendMessageAction,
+} from '../actions';
 import socketIOClient, { Socket } from 'socket.io-client';
 import { EventTypes } from '../EventTypes';
+import { Message } from '../reducers/roomReducer';
 
 const url = 'http://localhost:3001';
 
@@ -26,21 +35,31 @@ function* workerJoinRoom(action: joinRoomAction) {
   const socket = yield call(join, action.payload.nspId);
   if (socket) {
     // subscribe
-    console.log(socket);
-    const channel = yield fork(subscribe, socket);
-    console.log(channel);
-    while (true) {
-      const action = yield take(ActionTypes.SEND_MESSAGE);
-      const message = action.payload;
-      yield call(sendMessage, message, socket);
-      yield put(action); // TODO: handle MESSAGE action in the reducer & handle
-    }
+    yield put(updateUser(socket.id));
+
+    yield fork(listen, socket);
+    yield fork(talk, socket);
   } else console.log('connectError');
 }
 
+function* listen(socket: typeof Socket) {
+  const channel = yield call(subscribe, socket);
+  while (true) {
+    let action = yield take(channel);
+    yield put(action);
+  }
+}
+
+function* talk(socket: typeof Socket) {
+  while (true) {
+    const { payload }: sendMessageAction = yield take(ActionTypes.SEND_MESSAGE);
+
+    yield call(sendMessage, payload.msg, socket);
+    // TODO: handle SEND_MESSAGE action in the reducer & handle
+  }
+}
+
 function sendMessage(msg: string, socket: typeof Socket) {
-  console.log(msg);
-  console.log(socket);
   socket.emit(EventTypes.MESSAGE, msg);
 }
 
@@ -77,11 +96,12 @@ function subscribe(socket: typeof Socket) {
       console.log(data);
     });
     socket.on(EventTypes.MESSAGE_SENT, (data: any) => {
-      console.log(data); // TODO: emit MESSAGE SENT action and handle in the reducer
+      //console.log(data); // TODO: emit MESSAGE SENT action and handle in the reducer
+      emit(messageSent(data));
     });
     socket.on(EventTypes.MESSAGE_RECEIVED, (data: any) => {
-      console.log(data); // TODO: emit MESSAGE RECEIVED action and handle in the reducer
-      //emit();
+      //console.log(data); // TODO: emit MESSAGE RECEIVED action and handle in the reducer
+      emit(messageReceived(data));
     });
     return () => {};
   });
