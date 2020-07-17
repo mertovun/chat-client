@@ -9,7 +9,7 @@ export interface Room {
   userId: string;
   roomId: string;
   messages: Message[];
-  users: User[];
+  users: any;
 }
 interface User {
   nickname?: string;
@@ -19,6 +19,11 @@ export interface Message {
   userId: string;
   msg: string;
   timestamp: number | null;
+}
+
+export interface SysMsg {
+  userId?: string;
+  msg: string;
 }
 
 const userIdReducer = (
@@ -61,9 +66,6 @@ const messagesReducer = (
           msg.msg === payload.msg &&
           msg.timestamp === null
       );
-      console.log(state);
-      console.log(payload);
-      console.log(index);
       if (index >= 0) state[index].timestamp = payload.timestamp;
       return [...state];
     case ActionTypes.SEND_MESSAGE:
@@ -73,13 +75,13 @@ const messagesReducer = (
   }
 };
 
-const usersReducer = (state: User[] = [], { type, payload }: Action) => {
+const usersReducer = (state: {}, { type, payload }: Action) => {
   switch (type) {
-    // case typeName:
-    //   return { ...state, ...payload };
+    case ActionTypes.UPDATE_ROOM:
+      return { ...payload };
 
     default:
-      return [...state];
+      return state;
   }
 };
 

@@ -32,6 +32,11 @@ export interface updateUserAction {
   payload: string;
 }
 
+export interface updateRoomAction {
+  type: ActionTypes.UPDATE_ROOM;
+  payload: {};
+}
+
 export interface messageReceivedAction {
   type: ActionTypes.MESSAGE_RECEIVED;
   payload: Message;
@@ -70,5 +75,10 @@ export const messageReceived = (payload: Message): messageReceivedAction => ({
 
 export const updateUser = (payload: string): updateUserAction => ({
   type: ActionTypes.UPDATE_USER,
+  payload,
+});
+
+export const updateRoom = (payload: {}): updateRoomAction => ({
+  type: ActionTypes.UPDATE_ROOM,
   payload,
 });

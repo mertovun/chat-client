@@ -5,6 +5,7 @@ import { sendMessage } from '../actions';
 import { History } from 'history';
 import { StoreState } from '../reducers';
 import { Room, Message } from '../reducers/roomReducer';
+import { parseTime } from '../utils';
 
 interface Props {
   history: History;
@@ -24,26 +25,49 @@ class ChatRoom extends Component<Props> {
   }
   handleSubmit = (e: any): void => {
     e.preventDefault();
-    const message: Message = {
-      userId: this.props.room.userId,
-      msg: this.state.message,
-      timestamp: null,
-    };
-    this.props.sendMessage(message);
-    this.setState({ message: '' });
+    if (this.state.message) {
+      const message: Message = {
+        userId: this.props.room.userId,
+        msg: this.state.message,
+        timestamp: null,
+      };
+      this.props.sendMessage(message);
+      this.setState({ message: '' });
+    }
   };
+
   handleInputChange = (e: any): void => {
     this.setState({ message: e.target.value });
   };
 
+  renderSystemMsg = (msg: Message, i: number) => <li key={i}>{msg.msg}</li>;
+
+  renderMsg = (msg: Message, i: number) => {
+    const user = this.props.room.users[msg.userId];
+    return (
+      <li key={i}>
+        <span
+          style={{
+            color: user.color,
+            fontWeight: 'bold',
+          }}
+        >
+          {user.nickname}
+        </span>{' '}
+        -{' '}
+        <span>{msg.timestamp === null ? '...' : parseTime(msg.timestamp)}</span>{' '}
+        : {msg.msg}
+      </li>
+    );
+  };
+
   renderMessages() {
     const messages = this.props.room.messages;
-    console.log(messages);
-    return messages.map((msg, i) => (
-      <li key={i}>
-        <span></span> - <span></span> : {msg.msg}
-      </li>
-    ));
+    return messages.map((msg, i) =>
+      msg.userId === 'system'
+        ? this.renderSystemMsg(msg, i)
+        : this.renderMsg(msg, i)
+    );
   }
 
   render() {

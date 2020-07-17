@@ -8,10 +8,11 @@ import {
   messageReceived,
   updateUser,
   sendMessageAction,
+  updateRoom,
 } from '../actions';
 import socketIOClient, { Socket } from 'socket.io-client';
 import { EventTypes } from '../EventTypes';
-import { Message } from '../reducers/roomReducer';
+import {} from '../reducers/roomReducer';
 
 const url = 'http://localhost:3001';
 
@@ -35,6 +36,7 @@ function* workerJoinRoom(action: joinRoomAction) {
   const socket = yield call(join, action.payload.nspId);
   if (socket) {
     // subscribe
+    // sysmsg welcome
     yield put(updateUser(socket.id));
 
     yield fork(listen, socket);
@@ -91,6 +93,7 @@ function subscribe(socket: typeof Socket) {
     });
     socket.on(EventTypes.ROOM_DATA, (data: any) => {
       console.log(data);
+      emit(updateRoom(data.users));
     });
     socket.on(EventTypes.SYSTEM_MESSAGE, (data: any) => {
       console.log(data);
